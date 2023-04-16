@@ -25,16 +25,20 @@ public class Main {
         Calendar calendar1 = Calendar.getInstance(timeZone1);
         calendar1.set(2023, 6, 5, 1,30,0);
 
-
-
-
+        int diff = timeZone2.getRawOffset() - timeZone1.getRawOffset();
+        if (timeZone1.inDaylightTime(calendar1.getTime())) {
+            diff -= timeZone1.getDSTSavings();
+        }
         calendar1.setTimeZone(timeZone2);
+        if (timeZone2.inDaylightTime(calendar1.getTime())) {
+            diff += timeZone2.getDSTSavings();
+        }
+        double timeDiffHours = diff / (double) (1000 * 60 * 60);
 
-
-
-
+        System.out.println("Różnica: " + Math.abs(timeDiffHours));
     }
     public static void main(String[] args) throws ParseException{
-        zad4();
+        //zad4();
+        zad5();
     }
 }
