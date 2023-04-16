@@ -16,6 +16,10 @@ public class Main {
         System.out.println("Podaj date w formacie MM.dd.yyyy");
         String data2 = scan.nextLine();
         Date date2 = dateFormat.parse(data2);
+
+        long diff = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
+
+        System.out.println("Liczba dni: " + diff);
     }
 
     public static void zad5() {
@@ -38,7 +42,7 @@ public class Main {
         System.out.println("Różnica: " + Math.abs(timeDiffHours));
     }
     public static void main(String[] args) throws ParseException{
-        //zad4();
+        zad4();
         zad5();
     }
 }
