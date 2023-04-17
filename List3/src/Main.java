@@ -37,12 +37,12 @@ public class Main {
         if (timeZone2.inDaylightTime(calendar1.getTime())) {
             diff += timeZone2.getDSTSavings();
         }
-        double timeDiffHours = diff / (double) (1000 * 60 * 60);
+        diff = diff / (1000 * 60 * 60);
 
-        System.out.println("Różnica: " + Math.abs(timeDiffHours));
+        System.out.println("Różnica: " + diff);
     }
     public static void main(String[] args) throws ParseException{
-        zad4();
+        //zad4();
         zad5();
     }
 }
