@@ -37,6 +37,7 @@ public class Main {
         if (timeZone2.inDaylightTime(calendar1.getTime())) {
             diff += timeZone2.getDSTSavings();
         }
+        
         diff = diff / (1000 * 60 * 60);
 
         System.out.println("Różnica: " + diff);
