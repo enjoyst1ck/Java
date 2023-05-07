@@ -49,7 +49,7 @@ public class Main {
         ArrayList<Date> dates = new ArrayList<>();
 
         while(loop){
-            System.out.println("Wprowadź date w formacie dd.MM.yyyy");
+            System.out.println("Wprowadź date w formacie " + format.toPattern());
             String dateFromUser = scanner.nextLine();
             Date date = format.parse(dateFromUser);
 
@@ -85,6 +85,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws ParseException{
-        zad1();
+        //zad1();
+        zad3();
     }
 }
