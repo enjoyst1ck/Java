@@ -1,6 +1,6 @@
 import java.security.PublicKey;
 
-public abstract class Pies extends Zwierze implements Ladowe {
+public class Pies extends Zwierze implements Ladowe {
     public float waga;
 
     public Pies() {
@@ -19,5 +19,13 @@ public abstract class Pies extends Zwierze implements Ladowe {
     public void Wyswietl_Informacje() {
         super.Wyswietl_Informacje();
         System.out.println("Waga: " + waga);
+    }
+
+    public void dajGlos() {
+        System.out.println("Hau Hau!");
+    }
+
+    public void jedz() {
+        System.out.println("Jem!");
     }
 }
