@@ -7,6 +7,9 @@ public class Calculator extends JFrame implements ActionListener{
     private static final long serialVersionUID = 1L;
     private JTextField result;
     private JButton zero, one, two, three, four, five, six, seven, eight, nine, plus, minus, multiply, divide, clear, equals, changeSign;
+    double help1 = 0;
+    double help2 = 1;
+    String operator = "";
     public Calculator()
     {
         setSize(310,420);
@@ -111,7 +114,115 @@ public class Calculator extends JFrame implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == seven){
+            result.setText(result.getText()+"7");
+        }
+        if(e.getSource() == eight){
+            result.setText(result.getText()+"8");
+        }
+        if(e.getSource() == nine){
+            result.setText(result.getText()+"9");
+        }
+        if(e.getSource() == four){
+            result.setText(result.getText()+"4");
+        }
+        if(e.getSource() == five){
+            result.setText(result.getText()+"5");
+        }
+        if(e.getSource() == six){
+            result.setText(result.getText()+"6");
+        }
+        if(e.getSource() == one){
+            result.setText(result.getText()+"1");
+        }
+        if(e.getSource() == two){
+            result.setText(result.getText()+"2");
+        }
+        if(e.getSource() == three){
+            result.setText(result.getText()+"3");
+        }
+        if(e.getSource() == zero){
+            result.setText(result.getText()+"0");
+        }
 
+        if(e.getSource() == equals){
+            if(operator == "+"){
+                help1 = help1 + Double.parseDouble(result.getText());
+                result.setText(Double.toString(help1));
+            }
+            if(operator == "*"){
+                help1 = help1 * Double.parseDouble(result.getText());
+                result.setText(Double.toString(help1));
+            }
+            if(operator == "/"){
+                if(Double.parseDouble(result.getText()) == 0){
+                    JOptionPane.showMessageDialog(null, "Nie można podzielić przez zero.");
+                    result.setText("");
+                    help1 = 0;
+                }else{
+                    help1 = help1 / Double.parseDouble(result.getText());
+                    result.setText(Double.toString(help1));
+                }
+            }
+            if(operator == "-"){
+                help1 = help1 - Double.parseDouble(result.getText());
+                result.setText(Double.toString(help1));
+            }
+            buttonEnabled();
+        }
+
+        if(e.getSource() == clear){
+            buttonEnabled();
+            result.setText("");
+            help1 = 0;
+        }
+        if(e.getSource() == divide){
+            buttonDisabled();
+            operator = "/";
+            help1 = Double.parseDouble(result.getText());
+            result.setText("");
+        }
+        if(e.getSource() == multiply){
+            buttonDisabled();
+            operator = "*";
+            help1 = Double.parseDouble(result.getText());
+            result.setText("");
+        }
+        if(e.getSource() == plus){
+            buttonDisabled();
+            operator = "+";
+            help1 = Double.parseDouble(result.getText());
+            result.setText("");
+        }
+        if(e.getSource() == minus){
+            buttonDisabled();
+            operator = "-";
+            help1 = Double.parseDouble(result.getText());
+            result.setText("");
+        }
+        if(e.getSource() == changeSign){
+            if(result.getText().length() != 0){
+                help2 = -1 * Double.parseDouble(result.getText());
+                result.setText(Double.toString(help2));
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Brak liczby do zmienienia znaku.");
+            }
+        }
+    }
+
+    public void buttonDisabled(){
+        multiply.setEnabled(false);
+        divide.setEnabled(false);
+        plus.setEnabled(false);
+        minus.setEnabled(false);
+    }
+
+    public void buttonEnabled(){
+        multiply.setEnabled(true);
+        divide.setEnabled(true);
+        plus.setEnabled(true);
+        minus.setEnabled(true);
     }
     public static void main(String[] args) {
         Calculator app = new Calculator();
