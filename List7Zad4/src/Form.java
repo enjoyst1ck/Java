@@ -108,7 +108,7 @@ public class Form extends JFrame implements ActionListener, FocusListener
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //resetForm();
+                resetForm();
             }
         });
         add(resetButton);
@@ -137,10 +137,66 @@ public class Form extends JFrame implements ActionListener, FocusListener
         controlNumberResult.setBounds(10,240,200,20);
         add(controlNumberResult);
 
-        //setDisabledResultField();
+        setDisabledResultField();
     }
     public void actionPerformed(ActionEvent e) {
+        if((firstNameTextBox.getText().length() != 0) && (secondNameTextBox.getText().length() != 0) && peselTextBox.getText().length() == 11){
+            firstNameResult.setText("Imie: " + firstNameTextBox.getText());
+            secondNameResult.setText("Nazwisko: " + secondNameTextBox.getText());
+            peselResult.setText("PESEL: " + peselTextBox.getText());
 
+            String pesel = peselTextBox.getText();
+            if((pesel.substring(2, 3).equals("0")) || (pesel.substring(2, 3).equals("1"))){
+                birthDateResult.setText("Data Urodzenia: " + pesel.substring(4,6) + "." + pesel.substring(2,4) + "." + "19" + pesel.substring(0,2));
+            }else if((pesel.substring(2, 3).equals("2")) || (pesel.substring(2, 3).equals("3"))){
+                birthDateResult.setText("Data Urodzenia: " + pesel.substring(4,6) + "." + (Integer.parseInt(pesel.substring(2,3)) - 2) + pesel.substring(3,4) + "." + "20" + pesel.substring(0,2));
+            }else if((pesel.substring(2, 3).equals("8")) || (pesel.substring(2, 3).equals("9"))){
+                birthDateResult.setText("Data Urodzenia: " + pesel.substring(4,6) + "." + (Integer.parseInt(pesel.substring(2,3)) - 9) + pesel.substring(3,4) + "." + "18" + pesel.substring(0,2));
+            }
+            int sex = Integer.parseInt(pesel.substring(9,10));
+            if(sex%2 == 0){
+                sexResult.setText("Płeć: Kobieta");
+            }
+            else{
+                sexResult.setText("Płeć: Mężczyzna");
+            }
+            controlNumberResult.setText("Cyfra kontrolna: " + pesel.substring(10,11));
+            setEnabledResultField();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Wprowadzono błędne dane.");
+            resetForm();
+        }
+    }
+
+    public void resetForm(){
+        firstNameTextBox.setText("Imie");
+        secondNameTextBox.setText("Nazwisko");
+        peselTextBox.setText("PESEL");
+        acceptCheckBox.setSelected(false);
+        firstNameResult.setText("Imie: ");
+        secondNameResult.setText("Nazwisko: ");
+        peselResult.setText("PESEL: ");
+        birthDateResult.setText("Data urodzenia: ");
+        sexResult.setText("Płeć: ");
+        controlNumberResult.setText("Cyfra kontrolna: ");
+        setDisabledResultField();
+    }
+    public void setEnabledResultField(){
+        firstNameResult.setEnabled(true);
+        secondNameResult.setEnabled(true);
+        peselResult.setEnabled(true);
+        birthDateResult.setEnabled(true);
+        sexResult.setEnabled(true);
+        controlNumberResult.setEnabled(true);
+    }
+    public void setDisabledResultField(){
+        firstNameResult.setEnabled(false);
+        secondNameResult.setEnabled(false);
+        peselResult.setEnabled(false);
+        birthDateResult.setEnabled(false);
+        sexResult.setEnabled(false);
+        controlNumberResult.setEnabled(false);
     }
 
     public static void main(String[] args) {
