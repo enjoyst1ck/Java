@@ -72,8 +72,108 @@ public class RegistrationForm extends JFrame implements ActionListener
     }
 
     public void actionPerformed(ActionEvent e){
+        String nick = nickTextField.getText();
+        try {
+            checkNick(nick);
+            nickBool = true;
+        }catch (NickException mess){
+            nickBool = false;
+            JOptionPane.showMessageDialog(null, mess.getMessage());
+        }
 
+        String firstName = firstNameTextField.getText();
+        try{
+            checkFirstName(firstName);
+            firstNameBool = true;
+        }catch (FirstSecondNameException mess){
+            firstNameBool = false;
+            JOptionPane.showMessageDialog(null, "Imie " + mess.getMessage());
+        }
+
+        String secondName = secondNameTextField.getText();
+        try{
+            checkSecondName(secondName);
+            secondNameBool = true;
+        }catch (FirstSecondNameException mess){
+            secondNameBool = false;
+            JOptionPane.showMessageDialog(null, "Nazwisko " + mess.getMessage());
+        }
+
+        String email = emailTextField.getText();
+        try{
+            checkEmail(email);
+            emailBool = true;
+        }catch (EmailException mess){
+            emailBool = false;
+            JOptionPane.showMessageDialog(null, mess.getMessage());
+        }
+
+        String sex = "";
+        if(femaleRadioButton.isSelected()){
+            sex = "Kobieta";
+        }else if(maleRadioButton.isSelected()){
+            sex = "Mężczyzna";
+        }
+        try{
+            checkSex(sex, firstName);
+            sexBool = true;
+        }catch (SexException mess){
+            sexBool = false;
+            JOptionPane.showMessageDialog(null, mess.getMessage());
+        }
+
+        if(nickBool && firstNameBool && secondNameBool && emailBool && sexBool) {
+            JOptionPane.showMessageDialog(null, "Formularz poprawny");
+            resetForm();
+        }
     }
+
+    static void checkNick(String nick) throws NickException{
+        if(nick.length() < 6 || !nick.matches(".*\\d.*")){
+            throw new NickException(nick);
+        }
+    }
+
+    static void checkFirstName(String firstName) throws FirstSecondNameException {
+        if(firstName.length() == 0 || !firstName.matches("[A-Z][a-zA-Z]*")){
+            throw new FirstSecondNameException(firstName);
+        }
+    }
+
+    static void checkSecondName(String secondName) throws FirstSecondNameException {
+        if(secondName.length() == 0 || !secondName.matches("[A-Z][a-zA-Z]*")){
+            throw new FirstSecondNameException(secondName);
+        }
+    }
+
+    static void checkEmail(String email) throws EmailException{
+        if(email.length() == 0 || !email.endsWith("@gra.pl")){
+            throw new EmailException(email);
+        }
+    }
+
+    static void checkSex(String sex, String firstName) throws SexException{
+        if((firstName.endsWith("ek") || firstName.endsWith("usz")) && sex == "Kobieta"){
+            throw new SexException(sex);
+        }
+        if((firstName.endsWith("ta") || firstName.endsWith("na")) && sex == "Mężczyzna"){
+            throw new SexException(sex);
+        }
+    }
+
+    public void resetForm(){
+        nickTextField.setText("");
+        firstNameTextField.setText("");
+        secondNameTextField.setText("");
+        emailTextField.setText("");
+        femaleRadioButton.setSelected(true);
+        nickBool = false;
+        firstNameBool = false;
+        secondNameBool = false;
+        emailBool = false;
+        sexBool = false;
+    }
+
     public static void main(String[] args) {
         RegistrationForm app = new RegistrationForm();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
