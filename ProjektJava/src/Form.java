@@ -1,7 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -102,8 +99,9 @@ public class Form extends JFrame implements ActionListener{
                 }
                 newConnection.disconnect();
                 if (Objects.equals(paswordFromDatabase, passwordFromUser)) {
-                    JOptionPane.showMessageDialog(this, "Zalogowano.");
-                    //dispose();
+                    dispose();
+                    MainForm mainForm = new MainForm(this);
+                    mainForm.setVisible(true);
 
                 }else{
                     JOptionPane.showMessageDialog(this, "Błędne hasło.");
