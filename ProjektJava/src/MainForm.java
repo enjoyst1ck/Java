@@ -57,7 +57,7 @@ public class MainForm extends JDialog implements ActionListener{
         deleteDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                deleteData();
             }
         });
 
@@ -71,7 +71,51 @@ public class MainForm extends JDialog implements ActionListener{
                 }
             }
         });
+        showDataFromDatabase();
+    }
 
+    public void showDataFromDatabase(){
+        DatabaseConnection newConnection = new DatabaseConnection();
+        try {
+            newConnection.connect();
+            String databaseQuery = "SELECT * FROM ogloszenia";
+            Statement statement = newConnection.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(databaseQuery);
+
+            tableModel.setRowCount(0);
+            while (resultSet.next()){
+                int id = resultSet.getInt("Id_ogloszenia");
+                String category = resultSet.getString("Kategoria");
+                String name = resultSet.getString("Nazwa");
+                String description = resultSet.getString("Opis");
+                String seller = resultSet.getString("Sprzedajacy");
+                int contact = resultSet.getInt("Kontakt");
+
+                Object[] rowData = {id, category, name, description, seller, contact};
+                tableModel.addRow(rowData);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        newConnection.disconnect();
+    }
+    public void deleteData(){
+        Object idToDelete = tableToData.getValueAt(tableToData.getSelectedRow(), 0);
+        int rowToDelete = (int) idToDelete;
+        DatabaseConnection newConnection = new DatabaseConnection();
+        try {
+            newConnection.connect();
+            String databaseQuery = "DELETE FROM ogloszenia WHERE Id_ogloszenia = ?";
+            PreparedStatement statement = newConnection.getConnection().prepareStatement(databaseQuery);
+            statement.setInt(1, rowToDelete);
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Usunięto ogłoszenie.");
+            showDataFromDatabase();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nie udało się usunąć ogłoszenia.");
+            throw new RuntimeException(ex);
+        }
+        newConnection.disconnect();
     }
 
     public void openDataEntryDialog(){
