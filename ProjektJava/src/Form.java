@@ -138,9 +138,6 @@ public class Form extends JFrame implements ActionListener{
         }
     }
 
-
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         openDataEntryDialog();

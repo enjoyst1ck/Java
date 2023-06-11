@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class AddDataWindow extends JDialog implements ActionListener {
 
@@ -67,6 +69,28 @@ public class AddDataWindow extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if(categoryTextField.getText().length() > 0 && nameTextField.getText().length() > 0 && descriptionTextField.getText().length() > 0 &&
+                sellerTextField.getText().length() > 0 && contactTextField.getText().length() == 9 && contactTextField.getText().matches("\\d+")) {
+            DatabaseConnection newConnection = new DatabaseConnection();
+            try {
+                newConnection.connect();
+                String databaseQuery = "INSERT INTO ogloszenia (Kategoria, Nazwa, Opis, Sprzedajacy, Kontakt) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement statement = newConnection.getConnection().prepareStatement(databaseQuery);
+                statement.setString(1, categoryTextField.getText());
+                statement.setString(2, nameTextField.getText());
+                statement.setString(3, descriptionTextField.getText());
+                statement.setString(4, sellerTextField.getText());
+                statement.setInt(5, Integer.parseInt(contactTextField.getText()));
+                statement.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Dodano ogłoszenie!");
+                form.showDataFromDatabase();
+                dispose();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            newConnection.disconnect();
+        }else {
+            JOptionPane.showMessageDialog(this, "Uzupełnij pola.");
+        }
     }
 }
