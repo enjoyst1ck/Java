@@ -1,7 +1,11 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.sql.*;
+import java.util.Objects;
 public class Form extends JFrame implements ActionListener{
 
     private JButton logInButton;
@@ -72,13 +76,76 @@ public class Form extends JFrame implements ActionListener{
         logInButton.addActionListener(this);
     }
 
+    public void openDataEntryDialog() {
+        String paswordFromDatabase = "";
+        char[] passwordChars = passwordTextField.getPassword();
+        String passwordFromUser = new String(passwordChars);
+
+        if(passwordFromUser.equals("Hasło") || passwordFromUser.isEmpty() || Objects.equals(loginTextField.getText(), "Login") || loginTextField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Błędne dane logowania.");
+        }else {
+            if (checkLogin()) {
+                DatabaseConnection newConnection = new DatabaseConnection();
+                try {
+                    newConnection.connect();
+                    String databaseQuery = "SELECT haslo FROM uzytkownicy WHERE login = ?";
+                    PreparedStatement preparedStatement = newConnection.getConnection().prepareStatement(databaseQuery);
+                    preparedStatement.setString(1, loginTextField.getText());
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    while (resultSet.next()) {
+                        paswordFromDatabase = resultSet.getString("haslo");
+                    }
+
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                newConnection.disconnect();
+                if (Objects.equals(paswordFromDatabase, passwordFromUser)) {
+                    JOptionPane.showMessageDialog(this, "Zalogowano.");
+                    //dispose();
+
+                }else{
+                    JOptionPane.showMessageDialog(this, "Błędne hasło.");
+                }
+            }else {
+                JOptionPane.showMessageDialog(this, "Błędny login.");
+            }
+        }
+    }
+
+    public boolean checkLogin(){
+        String login = "";
+        DatabaseConnection newConnection = new DatabaseConnection();
+        try{
+            newConnection.connect();
+            String databaseQuery = "SELECT login FROM uzytkownicy WHERE login = ?";
+            PreparedStatement preparedStatement = newConnection.getConnection().prepareStatement(databaseQuery);
+            preparedStatement.setString(1, loginTextField.getText());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                login = resultSet.getString("login");
+            }
+
+        }catch (SQLException ex){
+            throw new RuntimeException(ex);
+        }
+        newConnection.disconnect();
+
+        if(login.length() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        openDataEntryDialog();
     }
 }
 
